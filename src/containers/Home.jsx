@@ -14,14 +14,14 @@ import '../assets/styles/App.scss';
 
 const API = 'http://localhost:3000/initalState';
 
-const App = () => {
+const Home = () => {
     const initialState = useInitialState(API);
 
     // console.log(videos);
 
     return (
         <div className="App">
-            <Header />
+            <Header clase="header"/>
             <Search />
 
             {initialState.myList?.length > 0 && (
@@ -55,4 +55,4 @@ const App = () => {
     )
 };
 
-export default App;
+export default Home;
