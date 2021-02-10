@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 // Styles
 import '../assets/styles/components/Login.scss';
 // Images
@@ -24,7 +25,12 @@ const LoginComp = () => (
         <div><img src={ googleIcon } /> Inicia sesión con Google</div>
         <div><img src= { twitterIcon } /> Inicia sesión con Twitter</div>
       </section>
-      <p className="login__container--register">No tienes ninguna cuenta <a href="">Regístrate</a></p>
+      <p className="login__container--register">
+        No tienes ninguna cuenta 
+        <Link to="./Register">
+          Registrate
+        </Link>
+      </p>
     </section>
   </section>
 );
