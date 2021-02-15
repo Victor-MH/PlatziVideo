@@ -1,12 +1,12 @@
 import React, { Children } from 'react';
-import MiniHeader from './Miniheader';
-import Header from './Header';
+// import MiniHeader from './Miniheader';
+// import Header from './Header';
 import Footer from './Footer';
 
 const Layout = ({ children }) => (
     <div className="App">
-        <Header />
-            { children }
+        
+        { children }
         <Footer />
     </div>
 );
