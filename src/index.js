@@ -2,7 +2,7 @@ import React from 'react';
 // Funciona para empujar lo que hagamos con react al nav
 import ReactDom from "react-dom";
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, compose } from 'redux';
 import reducer from './reducers';
 // Components
 import App from './routes/App';
@@ -173,7 +173,10 @@ const initialState = {
     ]
 }
 
-const store = createStore(reducer, initialState);
+// Conectar con Redux DevTools
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(reducer, initialState, composeEnhancers());
 
 // Recibe el componente y donde va a insertarlo
 ReactDom.render(
