@@ -76,4 +76,4 @@ yarn-error.log
 dist/
 
 #static
-src/assets/static
+src/frontend/assets/static
