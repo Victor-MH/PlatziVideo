@@ -17,14 +17,27 @@ if (ENV ==='development') {
   const webpackHotMiddleware = require('webpack-hot-middleware');
 
   const compiler = webpack(webpackConfig);
-  const serverConfig = { publicPath: webpackConfig.output.path, serverSideRender: true };
+  const serverConfig = { publicPath: webpackConfig.output.publicPath, serverSideRender: true };
 
   app.use(webpackDevMiddleware(compiler, serverConfig));
   app.use(webpackHotMiddleware(compiler));
 }
 
 app.get('*', (req, res) => {
-  res.send({ hello: 'express' });
+  res.send(
+    `<!DOCTYPE html>
+    <html>
+        <head>
+            <link rel="stylesheet" href="bundle/app.css" type="text/css"></link>
+            <title>Platzi Video</title>
+        </head>
+        <body>
+            
+            <div id="app"></div>
+            <script src="bundle/app.js" type="text/javascript"></script>
+        </body>
+    </html>`,
+  );
 });
 
 app.listen(PORT, (err) => {
