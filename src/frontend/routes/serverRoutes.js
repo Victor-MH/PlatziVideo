@@ -7,22 +7,22 @@ import Player from '../containers/Player';
 
 const routes = [
   {
-    exact,
+    exact: true,
     path: '/',
     component: Home,
   },
   {
-    exact,
+    exact: true,
     path: '/login',
     component: Login,
   },
   {
-    exact,
+    exact: true,
     path: '/register',
     component: Register,
   },
   {
-    exact,
+    exact: true,
     path: '/player/:id',
     component: Player,
   },
