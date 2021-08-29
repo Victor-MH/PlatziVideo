@@ -9,17 +9,19 @@ import reducer from './reducers';
 // Components
 import App from './routes/App';
 
-import initialState from './initialState';
-
 const history = createBrowserHistory();
+
+const preloadedState = window.__PRELOADED_STATE__;
 
 // Conectar con Redux DevTools
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(reducer, initialState, composeEnhancers());
+const store = createStore(reducer, preloadedState, composeEnhancers());
+
+delete window.__PRELOADED_STATE__;
 
 // Recibe el componente y donde va a insertarlo
-ReactDom.render(
+ReactDom.hydrate(
   <Provider store={store}>
     <Router history={history}>
       <App />

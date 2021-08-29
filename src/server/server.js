@@ -12,6 +12,7 @@ import { renderRoutes } from 'react-router-config';
 import serverRoutes from '../frontend/routes/serverRoutes';
 import reducer from '../frontend/reducers';
 import initialState from '../frontend/initialState';
+import Layout from '../frontend/components/Layout';
 
 dotenv.config();
 
@@ -33,7 +34,7 @@ if (ENV ==='development') {
   app.use(webpackHotMiddleware(compiler));
 }
 
-const setResponse = (html) => {
+const setResponse = (html, preloadedState) => {
   return (
     `<!DOCTYPE html>
     <html>
@@ -44,6 +45,9 @@ const setResponse = (html) => {
         <body>
             
             <div id="app">${html}</div>
+            <script>
+              window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
+            </script>
             <script src="bundle/app.js" type="text/javascript"></script>
         </body>
     </html>`
@@ -52,15 +56,18 @@ const setResponse = (html) => {
 
 const renderApp = (req, res) => {
   const store = createStore(reducer, initialState);
+  const preloadedState = store.getState();
   const html = renderToString(
     <Provider store={store}>
       <StaticRouter location={req.url} context={{}}>
-        {renderRoutes(serverRoutes)}
+        <Layout>
+          {renderRoutes(serverRoutes)}
+        </Layout>
       </StaticRouter>
     </Provider>,
   );
 
-  res.send(setResponse(html));
+  res.send(setResponse(html, preloadedState));
 };
 
 app.get('*', renderApp);
