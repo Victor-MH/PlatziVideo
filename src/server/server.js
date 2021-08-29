@@ -15,6 +15,8 @@ import reducer from '../frontend/reducers';
 import initialState from '../frontend/initialState';
 import Layout from '../frontend/components/Layout';
 
+import getManifest from './getManifest';
+
 dotenv.config();
 
 const { ENV, PORT } = process.env;
@@ -35,6 +37,10 @@ if (ENV ==='development') {
   app.use(webpackHotMiddleware(compiler));
 } else {
   console.log('Production config');
+  app.use((req, res, next) => {
+    if (!req.hashManifest) req.hashManifest = getManifest();
+    next();
+  });
   app.use(express.static(`${__dirname}/public`));
   app.use(helmet());
   app.use(helmet.permittedCrossDomainPolicies());
@@ -52,12 +58,15 @@ if (ENV ==='development') {
   );
 }
 
-const setResponse = (html, preloadedState) => {
+const setResponse = (html, preloadedState, manifest) => {
+  const mainStyles = manifest ? manifest['main.css'] : 'bundle/app.css';
+  const mainBuild = manifest ? manifest['main.js'] : 'bundle/app.js';
+
   return (
     `<!DOCTYPE html>
     <html>
         <head>
-            <link rel="stylesheet" href="bundle/app.css" type="text/css"></link>
+            <link rel="stylesheet" href="${mainStyles}" type="text/css"></link>
             <title>Platzi Video</title>
         </head>
         <body>
@@ -66,7 +75,7 @@ const setResponse = (html, preloadedState) => {
             <script>
               window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
             </script>
-            <script src="bundle/app.js" type="text/javascript"></script>
+            <script src="${mainBuild}" type="text/javascript"></script>
         </body>
     </html>`
   );
@@ -85,7 +94,7 @@ const renderApp = (req, res) => {
     </Provider>,
   );
 
-  res.send(setResponse(html, preloadedState));
+  res.send(setResponse(html, preloadedState, req.hashManifest));
 };
 
 app.get('*', renderApp);
