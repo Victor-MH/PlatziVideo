@@ -34,10 +34,22 @@ if (ENV ==='development') {
   app.use(webpackDevMiddleware(compiler, serverConfig));
   app.use(webpackHotMiddleware(compiler));
 } else {
+  console.log('Production config');
   app.use(express.static(`${__dirname}/public`));
   app.use(helmet());
   app.use(helmet.permittedCrossDomainPolicies());
   app.disable('x-powered-by');
+  app.use(
+    helmet.contentSecurityPolicy({
+      useDefaults: true,
+      directives: {
+        'img-src': ["'self'", 'https://dummyimage.com'],
+        'script-src': ["'self'", "'sha256-z8HORJqCdLiSIW4YS3Tdf98HJCwkaNAj5NxN6nwYiLY='", 'unsafe-inline'],
+        'object-src': 'none',
+        'require-trusted-types-for': "'script'",
+      },
+    }),
+  );
 }
 
 const setResponse = (html, preloadedState) => {
