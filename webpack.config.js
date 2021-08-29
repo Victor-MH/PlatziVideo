@@ -9,6 +9,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle/app.js',
     publicPath: '/',
+    assetModuleFilename: 'assets/[hash][ext]',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -42,14 +43,7 @@ module.exports = {
       },
       {
         test: /\.(png|gif|jpg)$/,
-        use: [
-          {
-            'loader': 'file-loader',
-            options: {
-              name: 'assets/[hash].[ext]',
-            },
-          },
-        ],
+        type: 'asset/resource',
       },
     ],
   },
