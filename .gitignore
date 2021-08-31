@@ -78,3 +78,4 @@ src/server/public
 
 #static
 src/frontend/assets/static
+.next/
