@@ -69,5 +69,19 @@ module.exports = {
   optimization: {
     minimize: true,
     minimizer: [new TerserPlugin()],
+    splitChunks: {
+      chunks: 'async',
+      name: true,
+      cacheGroups: {
+        vendors: {
+          name: 'vendors',
+          chunks: 'all',
+          reuseExistingChunk: true,
+          priority: 1,
+          filename: isDev ? 'bundle/vendor.js' : 'bundle/vendor-[fullhash].js',
+          enforce: true,
+        },
+      },
+    },
   },
 };
