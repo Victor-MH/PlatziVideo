@@ -71,7 +71,6 @@ module.exports = {
     minimizer: [new TerserPlugin()],
     splitChunks: {
       chunks: 'async',
-      name: true,
       cacheGroups: {
         vendors: {
           name: 'vendors',
@@ -80,6 +79,10 @@ module.exports = {
           priority: 1,
           filename: isDev ? 'bundle/vendor.js' : 'bundle/vendor-[fullhash].js',
           enforce: true,
+          test(module, chunks) {
+            const name = module.nameForCondition && module.nameForCondition();
+            return (chunk) => chunk.name !== 'vendors' && /[\\/]node_modules[\\/]/.test(name);
+          },
         },
       },
     },
